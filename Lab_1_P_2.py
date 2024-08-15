@@ -7,9 +7,11 @@ from pyomo.opt import SolverFactory
 Model = ConcreteModel()
 
 # Data de entrada
-totales=5
+tareas=5
+trabajadores=3
 
-p=RangeSet(1, totales)
+p=RangeSet(1, tareas)
+q=RangeSet(1, trabajadores)
 
 trabajadores={1:8,2:10,3:6}
 ganancia={1:50, 2:60, 3:40, 4:70, 5:30}
