@@ -27,8 +27,8 @@ Model.obj = Objective(expr = sum(Model.x[i,j]*ganancia[i] for i in p for j in q)
 for j in range(1,3):
     Model.res1 = Constraint(expr = sum(Model.x[i,j]*horas[i] for i in p) <= trabajadores[j])
 
-for k in p:
-    Model.res2 = Constraint(expr = sum(Model.x[k,i] for i in q) <= 1)
+for i in p:
+    Model.res2 = Constraint(expr = sum(Model.x[i,k] for k in q) == 1)
 
 
 # Especificación del solver
