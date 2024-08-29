@@ -12,7 +12,6 @@ ciudadOrigen = 2
 destino=RangeSet(1, ciudadesDestino)
 origen=RangeSet(1, ciudadOrigen)
 
-
 #Conjunto
 demanda = {1:125,2:175,3:225, 4:250, 5:225, 6:200}
 oferta = {1:550, 2:700}
