@@ -15,23 +15,22 @@ origen=RangeSet(1, ciudadOrigen)
 #Conjunto
 demanda = {1:125,2:175,3:225, 4:250, 5:225, 6:200}
 oferta = {1:550, 2:700}
-bogota = {1:999, 2:2.5, 3:1.6, 4:1.4, 5:1.6, 6:1.4}
-medellin = {1:2.5, 2:999, 3:2.0 , 4:1.0, 5:1.0, 6:0.8}
+costos = {1:{1:999, 2:2.5}, 2:{1:2.5, 2:999}, 3: {1:1.6, 2:2.0}, 4:{1:1.4, 2:1.0}, 5:{1:1.6, 2:1.0}, 6:{1:1.4, 2:0.8}}
 
 # Variable de decisión
 Model.x = Var(destino, origen, domain=NonNegativeReals)
 
 # Función objetivo
-Model.obj = Objective(expr = sum(Model.x[i,j]*ganancia[i] for i in p for j in q), sense=maximize)
+Model.obj = Objective(expr = sum(Model.x[i,j]*costos.get(i).get(j) for i in destino for j in origen), sense=minimize)
 
 # Restricciones
 Model.lista1 = ConstraintList()
-for j in q:
-   Model.lista1.add(sum(Model.x[i,j]*horas[i] for i in p) <= workers[j]) 
+for j in origen:
+   Model.lista1.add(sum(Model.x[i,j] for i in destino) <= oferta[j]) 
 
 Model.lista2 = ConstraintList()
-for i in p:
-    Model.lista2.add(sum(Model.x[i,k] for k in q) == 1) 
+for i in destino:
+    Model.lista2.add(sum(Model.x[i,j] for i in origen) == demanda[i]) 
 
 
 # Especificación del solver
