@@ -21,7 +21,7 @@ costos = {1:{1:999, 2:2.5}, 2:{1:2.5, 2:999}, 3: {1:1.6, 2:2.0}, 4:{1:1.4, 2:1.0
 Model.x = Var(destino, origen, domain=NonNegativeReals)
 
 # Función objetivo
-Model.obj = Objective(expr = sum(Model.x[i,j]*costos.get(i).get(j) for i in destino for j in origen), sense=minimize)
+Model.obj = Objective(expr = sum(Model.x[i,j]*costos[i][j] for i in destino for j in origen), sense=minimize)
 
 # Restricciones
 Model.lista1 = ConstraintList()
@@ -30,7 +30,7 @@ for j in origen:
 
 Model.lista2 = ConstraintList()
 for i in destino:
-    Model.lista2.add(sum(Model.x[i,j] for i in origen) == demanda[i]) 
+    Model.lista2.add(sum(Model.x[i,j] for j in origen) == demanda[i]) 
 
 
 # Especificación del solver
