@@ -3,6 +3,7 @@ from pyomo.environ import *
 
 from pyomo.opt import SolverFactory
 import pandas as pd
+import numpy as np
 
 Model = ConcreteModel()
 
@@ -15,7 +16,8 @@ locs=RangeSet(0, localidades)
 travelers = RangeSet(1,viajeros)
 
 #Conjunto
-df = pd.read_csv('Lab 2\proof_case.csv')
+#df = pd.read_csv('Lab 2\proof_case.csv')
+df = pd.read_csv('MOS\Lab 2\proof_case.csv')
 costos = df.to_dict()
 costos = {int(k): v for k, v in costos.items()}
 costosMatrix = df.values
@@ -35,7 +37,7 @@ Model.lista1 = ConstraintList()
 Model.lista2 = ConstraintList()
 for k in travelers:
     for j in locs:
-        Model.lista1.add(sum(Model.x[i,j,k] for i in locs)) == Model.lista2.add(sum(Model.x[j,i,k] for i in locs))
+        Model.lista1.add(sum(Model.x[i,j,k] for i in locs) == sum(Model.x[j,i,k] for i in locs))
         
 
 Model.lista3 = ConstraintList()
@@ -47,7 +49,7 @@ for k in travelers:
 
 Model.lista4 = ConstraintList()
 for k in travelers:
-    Model.list4.add(Model.u[0,k] == 1)
+    Model.lista4.add(Model.u[0,k] == 1)
 
 
 # Especificación del solver
