@@ -12,28 +12,39 @@ viajeros = 2
 
 
 locs=RangeSet(0, localidades)
-traverlers = RangeSet(1,viajeros)
+travelers = RangeSet(1,viajeros)
 
 #Conjunto
 df = pd.read_csv('Lab 2\proof_case.csv')
 
 #Variable de decisión
-Model.x = Var(locs, locs, domain= Binary)
+Model.x = Var(locs, locs, travelers, domain= Binary)
 
 #Variable Auxiliar
-Model.u = Var(locs, traverlers,domain=Binary)
+Model.u = Var(locs, travelers,domain= NonNegativeReals)
 
 # Función objetivo
-Model.obj = Objective(expr = sum(Model.x[i,j]*costos[i][j] for i in destino for j in origen), sense=minimize)
+Model.obj = Objective(expr = sum(Model.x[i,j,k]*df.iloc[i,j] for i in locs for j in locs for k in travelers), sense=minimize)
 
 # Restricciones
-Model.lista1 = ConstraintList()
-for j in origen:
-   Model.lista1.add(sum(Model.x[i,j] for i in destino) <= oferta[j]) 
 
+Model.lista1 = ConstraintList()
 Model.lista2 = ConstraintList()
-for i in destino:
-    Model.lista2.add(sum(Model.x[i,j] for j in origen) == demanda[i]) 
+for k in travelers:
+    for j in locs:
+        Model.lista1.add(sum(Model.x[i,j,k] for i in locs) != 1)
+        Model.lista2.add(sum(Model.x[j,i,k] for i in locs) != 1) 
+
+Model.lista3 = ConstraintList()
+for k in travelers:
+   for i in locs:
+       for j in locs:
+            if i != j:
+                Model.lista3.add(Model.u[i,k]-Model.u[j,k]+(localidades)*Model.x[i,j,k] <= (localidades - 1)) 
+
+Model.lista4 = ConstraintList()
+for k in travelers:
+    Model.list4.add(Model.u[0,k] == 1)
 
 
 # Especificación del solver
