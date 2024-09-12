@@ -19,7 +19,6 @@ df = pd.read_csv('Lab 2\proof_case.csv')
 costos = df.to_dict()
 costos = {int(k): v for k, v in costos.items()}
 costosMatrix = df.values
-print(costosMatrix)
 
 #Variable de decisión
 Model.x = Var(locs, locs, travelers, domain= Binary)
@@ -36,7 +35,7 @@ Model.lista1 = ConstraintList()
 Model.lista2 = ConstraintList()
 for k in travelers:
     for j in locs:
-        Model.lista1.add(sum(Model.x[i,j,k] for i in locs) == Model.lista2.add(sum(Model.x[j,i,k] for i in locs)))
+        Model.lista1.add(sum(Model.x[i,j,k] for i in locs)) == Model.lista2.add(sum(Model.x[j,i,k] for i in locs))
         
 
 Model.lista3 = ConstraintList()
