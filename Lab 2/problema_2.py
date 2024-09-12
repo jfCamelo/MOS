@@ -16,6 +16,10 @@ travelers = RangeSet(1,viajeros)
 
 #Conjunto
 df = pd.read_csv('Lab 2\proof_case.csv')
+costos = df.to_dict()
+costos = {int(k): v for k, v in costos.items()}
+costosMatrix = df.values
+print(costosMatrix)
 
 #Variable de decisión
 Model.x = Var(locs, locs, travelers, domain= Binary)
@@ -24,7 +28,7 @@ Model.x = Var(locs, locs, travelers, domain= Binary)
 Model.u = Var(locs, travelers,domain= NonNegativeReals)
 
 # Función objetivo
-Model.obj = Objective(expr = sum(Model.x[i,j,k]*df.iloc[i,j] for i in locs for j in locs for k in travelers), sense=minimize)
+Model.obj = Objective(expr = sum(Model.x[i,j,k]*costosMatrix[i,j] for i in locs for j in locs for k in travelers), sense=minimize)
 
 # Restricciones
 
