@@ -32,8 +32,8 @@ Model.lista1 = ConstraintList()
 Model.lista2 = ConstraintList()
 for k in travelers:
     for j in locs:
-        Model.lista1.add(sum(Model.x[i,j,k] for i in locs) != 1)
-        Model.lista2.add(sum(Model.x[j,i,k] for i in locs) != 1) 
+        Model.lista1.add(sum(Model.x[i,j,k] for i in locs) == Model.lista2.add(sum(Model.x[j,i,k] for i in locs)))
+        
 
 Model.lista3 = ConstraintList()
 for k in travelers:
