@@ -22,6 +22,7 @@ costos = df.to_dict()
 costos = {int(k): v for k, v in costos.items()}
 costosMatrix = df.values
 
+
 #Variable de decisión
 Model.x = Var(locs, locs, travelers, domain= Binary)
 
@@ -35,21 +36,25 @@ Model.obj = Objective(expr = sum(Model.x[i,j,k]*costosMatrix[i,j] for i in locs 
 
 Model.lista1 = ConstraintList()
 Model.lista2 = ConstraintList()
-for k in travelers:
-    for j in locs:
-        Model.lista1.add(sum(Model.x[i,j,k] for i in locs) == sum(Model.x[j,i,k] for i in locs))
+for j in locs:
+    Model.lista1.add(sum(Model.x[i,j,k] for k in travelers for i in locs if i!= j) == 1)
+    Model.lista2.add(sum(Model.x[j,i,k] for k in travelers for i in locs if i!= j) == 1)
         
 
 Model.lista3 = ConstraintList()
 for k in travelers:
    for i in locs:
        for j in locs:
-            if i != j:
+            if i != j and i != 1 and j != 1:
                 Model.lista3.add(Model.u[i,k]-Model.u[j,k]+(localidades)*Model.x[i,j,k] <= (localidades - 1)) 
 
 Model.lista4 = ConstraintList()
 for k in travelers:
     Model.lista4.add(Model.u[0,k] == 1)
+
+#Model.lista4 = ConstraintList()
+#for k in travelers:
+#    Model.lista4.add(sum(Model.x[0,j,k] for j in locs if j != 0) == 1)
 
 
 # Especificación del solver
