@@ -9,7 +9,7 @@ Model = ConcreteModel()
 
 # Data de entrada
 localidades = 5
-viajeros = 2
+viajeros = 1
 
 
 locs=RangeSet(0, localidades)
@@ -36,16 +36,20 @@ Model.obj = Objective(expr = sum(Model.x[i,j,k]*costosMatrix[i,j] for i in locs 
 
 Model.lista1 = ConstraintList()
 Model.lista2 = ConstraintList()
+Model.lista5 = ConstraintList()
 for j in locs:
-    Model.lista1.add(sum(Model.x[i,j,k] for k in travelers for i in locs if i!= j) == 1)
-    Model.lista2.add(sum(Model.x[j,i,k] for k in travelers for i in locs if i!= j) == 1)
+    if j != 0:
+        Model.lista1.add(sum(Model.x[i,j,k] for k in travelers for i in locs if i!= j) == 1)
+        Model.lista2.add(sum(Model.x[j,i,k] for k in travelers for i in locs if i!= j) == 1)
+    else:
+        Model.lista5.add(sum(Model.x[i,j,k] for k in travelers for i in locs if i!= j) == sum(Model.x[j,i,k] for k in travelers for i in locs if i!= j))
         
 
 Model.lista3 = ConstraintList()
 for k in travelers:
    for i in locs:
        for j in locs:
-            if i != j and i != 1 and j != 1:
+            if i != j and i != 0 and j != 0:
                 Model.lista3.add(Model.u[i,k]-Model.u[j,k]+(localidades)*Model.x[i,j,k] <= (localidades - 1)) 
 
 Model.lista4 = ConstraintList()
