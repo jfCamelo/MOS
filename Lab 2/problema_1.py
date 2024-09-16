@@ -7,7 +7,7 @@ Model = ConcreteModel()
 Model.dual = Suffix(direction=Suffix.IMPORT)
 
 # Data de entrada
-ciudadesDestino = 6
+ciudadesDestino = 7
 ciudadOrigen = 2
 
 destino=RangeSet(1, ciudadesDestino)
@@ -21,7 +21,7 @@ hasta = ["Cali", "Bquilla", "Pasto", "Tunja", "Chía", "Manizales", "Bogotá"]
 #Conjunto
 demanda = {1:125,2:175,3:225, 4:250, 5:225, 6:200, 7:50}
 oferta = {1:550, 2:700}
-costos = {1:{1:999, 2:2.5}, 2:{1:2.5, 2:999}, 3: {1:1.6, 2:2.0}, 4:{1:1.4, 2:1.0}, 5:{1:0.8, 2:1.0}, 6:{1:1.4, 2:0.8}}
+costos = {1:{1:999, 2:2.5}, 2:{1:2.5, 2:999}, 3: {1:1.6, 2:2.0}, 4:{1:1.4, 2:1.0}, 5:{1:0.8, 2:1.0}, 6:{1:1.4, 2:0.8}, 7:{1:999, 2:1.0}}
 
 # Variable de decisión
 Model.x = Var(destino, origen, domain=NonNegativeReals)
@@ -59,8 +59,12 @@ print("\n")
 if 'ok' in str(results.Solver.status):    
     print("Cliente      Demanda   Enviado    Margen")
     for i, destino_name in enumerate(hasta):
-        total_enviado = sum(Model.x[i+1, j]() for j in origen)
-        print(f"{destino_name:10s}{demanda[i+1]:10.1f}{total_enviado:10.1f}{Model.dual[Model.lista2[i+1]]:10.4f}")
+        if i == len(hasta):
+            total_enviado = sum(Model.x[i, j]() for j in origen)
+            print(f"{destino_name:10s}{demanda[i+1]:10.1f}{total_enviado:10.1f}{Model.dual[Model.lista2[i+1]]:10.4f}")
+        else: 
+            total_enviado = sum(Model.x[i+1, j]() for j in origen)
+            print(f"{destino_name:10s}{demanda[i+1]:10.1f}{total_enviado:10.1f}{Model.dual[Model.lista2[i+1]]:10.4f}")
 else:
     print("No Valid Solution Found")
 
