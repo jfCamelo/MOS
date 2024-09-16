@@ -16,7 +16,7 @@ origen=RangeSet(1, ciudadOrigen)
 #Variable Auxiliar
 
 desde = ["Bogotá", "Medellín"]
-hasta = ["Cali", "Bquilla", "Pasto", "Tunja", "Chía", "Manizales"]
+hasta = ["Cali", "Bquilla", "Pasto", "Tunja", "Chía", "Manizales", "Bogotá"]
 
 #Conjunto
 demanda = {1:125,2:175,3:225, 4:250, 5:225, 6:200, 7:50}
