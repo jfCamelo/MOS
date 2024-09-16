@@ -4,6 +4,7 @@ from pyomo.environ import *
 from pyomo.opt import SolverFactory
 
 Model = ConcreteModel()
+Model.dual = Suffix(direction=Suffix.IMPORT)
 
 # Data de entrada
 ciudadesDestino = 6
@@ -11,6 +12,11 @@ ciudadOrigen = 2
 
 destino=RangeSet(1, ciudadesDestino)
 origen=RangeSet(1, ciudadOrigen)
+
+#Variable Auxiliar
+
+desde = ["Bogotá", "Medellín"]
+hasta = ["Cali", "Barranquilla", "Pasto", "Tunja", "Chía", "Manizales."]
 
 #Conjunto
 demanda = {1:125,2:175,3:225, 4:250, 5:225, 6:200}
@@ -37,5 +43,18 @@ for i in destino:
 SolverFactory('glpk').solve(Model)
 
 Model.display()
+
+#Análisis de sensibilidad
+
+# print("\nSensitivity Analysis")
+# print(f"Oferta desde orígen = {-Model.dual[Model.lista1]}")
+# print(f"Demanda en destino = {-Model.dual[Model.lista2]}")
+
+print("\nAnálisis de sensibilidad")
+for i, constr in enumerate(Model.lista1):
+    print(f"Oferta desde orígen {desde[i]} = {-Model.dual[Model.lista1[i+1]]}")
+
+for i, constr in enumerate(Model.lista2):
+    print(f"Demanda en destino {hasta[i]} = {-Model.dual[Model.lista2[i+1]]}")
 
 
