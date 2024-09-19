@@ -11,16 +11,17 @@ import numpy as np
 Model = ConcreteModel()
 
 # Data de entrada
-localidades = 5
-viajeros = 3
+localidades = 8
+viajeros = 8
 
 
 locs=RangeSet(0, localidades)
 travelers = RangeSet(1,viajeros)
 
 #Conjunto
-df = pd.read_csv('Lab 2\proof_case.csv')
-# df = pd.read_csv('MOS\Lab 2\proof_case.csv')
+#df = pd.read_csv('Lab 2\proof_case.csv')
+#df = pd.read_csv('MOS\Lab 2\proof_case.csv')
+df = pd.read_csv('MOS\Lab 2\proof_case_ext.csv')
 costos = df.to_dict()
 costos = {int(k): v for k, v in costos.items()}
 costosMatrix = df.values
